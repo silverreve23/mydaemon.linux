@@ -1,0 +1,35 @@
+#!/bin/bash
+# chkconfig: 2345 20 80
+# description: myservice service
+# author: SBKInfo
+
+PATH_ARTISAN="/path/to/project"
+PATH_PID="/var/run/myservice.pid"
+
+case "$1" in
+start)
+    cd $PATH_ARTISAN
+    php artisan queue:work &
+    echo $! > $PATH_PID
+    ;;
+stop)
+    kill $(cat $PATH_PID)
+    rm $PATH_PID
+    ;;
+restart)
+    $0 stop
+    $0 start
+    ;;
+status)
+    if [ -e $PATH_PID ]; then
+       echo "myservice is running, pid=$(cat $PATH_PID)"
+    else
+       echo "myservice is NOT running"
+       exit 1
+    fi
+    ;;
+*)
+    echo "Usage: $0 {start|stop|status|restart}"
+esac
+
+exit 0

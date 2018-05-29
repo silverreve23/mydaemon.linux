@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "$(date) myservicechecker executed" >> /var/log/myservicechecker.log
+ps -aux | grep php | grep queue:work
+
+if [ $? -eq 1 ]; then
+    echo "$(date) myservicechecker run!" >> /var/log/myservicechecker.log
+    /usr/sbin/service myservicechecker restart
+fi
