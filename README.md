@@ -1,0 +1,2 @@
+# mydaemon
+Example daemon service
